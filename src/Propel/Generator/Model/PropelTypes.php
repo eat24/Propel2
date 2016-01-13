@@ -10,6 +10,8 @@
 
 namespace Propel\Generator\Model;
 
+use Propel\Generator\Types;
+
 /**
  * A class that maps PropelTypes to PHP native types and PDO types.
  *
@@ -43,6 +45,8 @@ class PropelTypes
     const TIME          = 'TIME';
     const TIMESTAMP     = 'TIMESTAMP';
     const TIMESTAMPTZ   = 'TIMESTAMPTZ';
+    const BU_DATE       = 'BU_DATE';
+    const BU_TIMESTAMP  = 'BU_TIMESTAMP';
     const BOOLEAN       = 'BOOLEAN';
     const BOOLEAN_EMU   = 'BOOLEAN_EMU';
     const OBJECT        = 'OBJECT';
@@ -111,9 +115,8 @@ class PropelTypes
         self::OBJECT,
         self::PHP_ARRAY,
         self::ENUM,
-        self::GEOMETRY,
+        self::GEOMETRY
     ];
-
     /**
      * Mapping between Propel mapping types and PHP native types.
      *
@@ -149,7 +152,6 @@ class PropelTypes
         self::ENUM          => self::ENUM_NATIVE_TYPE,
         self::GEOMETRY      => self::GEOMETRY,
     ];
-
     /**
      * Mapping between mapping types and PDO type constants (for prepared
      * statement settings).
@@ -179,12 +181,14 @@ class PropelTypes
         self::TIME          => \PDO::PARAM_STR,
         self::TIMESTAMP     => \PDO::PARAM_STR,
         self::TIMESTAMPTZ   => \PDO::PARAM_STR,
+        self::BU_DATE       => \PDO::PARAM_STR,
+        self::BU_TIMESTAMP  => \PDO::PARAM_STR,
         self::BOOLEAN       => \PDO::PARAM_BOOL,
         self::BOOLEAN_EMU   => \PDO::PARAM_INT,
         self::OBJECT        => \PDO::PARAM_LOB,
         self::PHP_ARRAY     => \PDO::PARAM_STR,
         self::ENUM          => \PDO::PARAM_INT,
-        self::GEOMETRY      => \PDO::PARAM_LOB,
+        self::GEOMETRY      => \PDO::PARAM_LOB
     ];
 
     private static $pdoTypeNames = [
@@ -234,7 +238,36 @@ class PropelTypes
      */
     public static function getPropelTypes()
     {
-        return self::$mappingTypes;
+        return [
+            new Types\ArrayType(),
+            new Types\BigIntType(),
+            new Types\BinaryType(),
+            new Types\BlobType(),
+            new Types\BooleanEmuType(),
+            new Types\BooleanType(),
+            new Types\CharType(),
+            new Types\ClobEmuType(),
+            new Types\ClobType(),
+            new Types\DateType(),
+            new Types\DecimalType(),
+            new Types\DoubleType(),
+            new Types\EnumType(),
+            new Types\FloatType(),
+            new Types\GeometryType(),
+            new Types\IntegerType(),
+            new Types\LongVarBinaryType(),
+            new Types\LongVarCharType(),
+            new Types\NumericType(),
+            new Types\ObjectType(),
+            new Types\RealType(),
+            new Types\SmallIntType(),
+            new Types\TimeStampType(),
+            new Types\TimeStampTzType(),
+            new Types\TimeType(),
+            new Types\TinyIntType(),
+            new Types\VarBinaryType(),
+            new Types\VarCharType(),
+        ];
     }
 
     /**
@@ -243,13 +276,15 @@ class PropelTypes
      * @param  string  $type
      * @return boolean
      */
-    public static function isTemporalType($type)
+    public static function isTemporalType($mappingType)
     {
-        return in_array($type, [
+        return in_array($mappingType, [
             self::DATE,
             self::TIME,
             self::TIMESTAMP,
-            self::TIMESTAMPTZ
+            self::TIMESTAMPTZ,
+            self::BU_DATE,
+            self::BU_TIMESTAMP,
         ]);
     }
 
@@ -261,7 +296,7 @@ class PropelTypes
      */
     public static function isTextType($mappingType)
     {
-        return in_array($mappingType, [
+         return in_array($mappingType, [
             self::CHAR,
             self::VARCHAR,
             self::LONGVARCHAR,
@@ -269,7 +304,9 @@ class PropelTypes
             self::DATE,
             self::TIME,
             self::TIMESTAMP,
-            self::TIMESTAMPTZ
+            self::TIMESTAMPTZ,
+            self::BU_DATE,
+            self::BU_TIMESTAMP,
         ]);
     }
 
@@ -346,7 +383,7 @@ class PropelTypes
      */
     public static function isPhpObjectType($phpType)
     {
-        return !self::isPhpPrimitiveType($phpType) && !in_array($phpType, [ 'resource', 'array' ]);
+        return !self::isPhpPrimitiveType($phpType) && !in_array($phpType, ['resource', 'array']);
     }
 
     /**

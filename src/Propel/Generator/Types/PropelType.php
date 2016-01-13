@@ -3,9 +3,9 @@
 namespace Propel\Generator\Types;
 
 abstract class PropelType {
-    public static $name;
-    public static $phpType;
-    public static $pdoType;
+    public $name;
+    public $phpType;
+    public $pdoType;
 
     private static $pdoTypeNames = [
         \PDO::PARAM_BOOL => 'PDO::PARAM_BOOL',
@@ -15,16 +15,20 @@ abstract class PropelType {
         \PDO::PARAM_LOB  => 'PDO::PARAM_LOB',
     ];
 
-    public static function getPhpNative() {
-        return self::$phpType;
+    public function getName() {
+        return $this->name;
     }
 
-    public static function getPDOType() {
-        return self::$pdoType;
+    public function getPhpNativeType() {
+        return $this->phpType;
     }
 
-    public static function getPdoTypeString($type) {
-        return self::$pdoTypeNames[self::getPDOType()];
+    public function getPDOType() {
+        return $this->$pdoType;
+    }
+
+    public function getPdoTypeString() {
+        return self::$pdoTypeNames[$this->getPDOType()];
     }
 
     /**
@@ -32,7 +36,7 @@ abstract class PropelType {
      *
      * @return boolean
      */
-    public static function isTemporalType() {
+    public function isTemporalType() {
         return false;
     }
 
@@ -41,7 +45,7 @@ abstract class PropelType {
      *
      * @return boolean
      */
-    public static function isTextType() {
+    public function isTextType() {
         return false;
     }
 
@@ -50,7 +54,7 @@ abstract class PropelType {
      *
      * @return boolean
      */
-    public static function isNumericType() {
+    public function isNumericType() {
         return false;
     }
 
@@ -59,7 +63,7 @@ abstract class PropelType {
      *
      * @return boolean
      */
-    public static function isBooleanType() {
+    public function isBooleanType() {
         return false;
     }
 
@@ -68,7 +72,7 @@ abstract class PropelType {
      *
      * @return boolean
      */
-    public static function isLobType() {
+    public function isLobType() {
         return self::$pdoType === \PDO::PARAM_LOB;
     }
 
@@ -78,8 +82,11 @@ abstract class PropelType {
      * @param  string  $phpType
      * @return boolean
      */
-    public static function isPhpPrimitiveType($phpType) {
-        return in_array($phpType, [ 'boolean', 'int', 'double', 'float', 'string' ]);
+    public function isPhpPrimitiveType() {
+        return in_array(
+            $this->getPhpNativeType(),
+            ['boolean', 'int', 'double', 'float', 'string']
+        );
     }
 
     /**
@@ -88,9 +95,12 @@ abstract class PropelType {
      * @param  string  $phpType
      * @return boolean
      */
-    public static function isPhpPrimitiveNumericType($phpType)
+    public function isPhpPrimitiveNumericType($phpType)
     {
-        return in_array($phpType, [ 'boolean', 'int', 'double', 'float' ]);
+        return in_array(
+            $this->getPhpNativeType(),
+            ['boolean', 'int', 'double', 'float']
+        );
     }
 
     /**
@@ -99,9 +109,9 @@ abstract class PropelType {
      * @param  string  $phpType
      * @return boolean
      */
-    public static function isPhpObjectType($phpType)
+    public function isPhpObjectType()
     {
-        return !self::isPhpPrimitiveType($phpType) && !in_array($phpType, [ 'resource', 'array' ]);
+        return !$this->isPhpPrimitiveType() && !in_array($this->getPhpNativeType(), ['resource', 'array']);
     }
 
     /**
@@ -110,8 +120,16 @@ abstract class PropelType {
      * @param  string  $phpType The PHP type to check
      * @return boolean
      */
-    public static function isPhpArrayType($phpType)
+    public function isPhpArrayType($phpType)
     {
         return strtoupper($phpType) === 'ARRAY';
+    }
+
+    public function isArrayType() {
+        return false;
+    }
+
+    public function isEnumType() {
+        return false;
     }
 }

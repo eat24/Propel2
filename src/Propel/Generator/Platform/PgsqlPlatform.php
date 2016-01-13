@@ -21,6 +21,7 @@ use Propel\Generator\Model\PropelTypes;
 use Propel\Generator\Model\Table;
 use Propel\Generator\Model\Unique;
 use Propel\Generator\Model\Diff\ColumnDiff;
+use Propel\Generator\Types;
 
 /**
  * Postgresql PlatformInterface implementation.
@@ -43,24 +44,24 @@ class PgsqlPlatform extends DefaultPlatform
     protected function initialize()
     {
         parent::initialize();
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::BOOLEAN, 'BOOLEAN'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::TINYINT, 'INT2'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::SMALLINT, 'INT2'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::BIGINT, 'INT8'));
+        $this->setSchemaDomainMapping(new Domain((new Types\BooleanType())->getName(), 'BOOLEAN'));
+        $this->setSchemaDomainMapping(new Domain((new Types\TinyIntType())->getName(), 'INT2'));
+        $this->setSchemaDomainMapping(new Domain((new Types\SmallIntType())->getName(), 'INT2'));
+        $this->setSchemaDomainMapping(new Domain((new Types\BigIntType())->getName(), 'INT8'));
         //$this->setSchemaDomainMapping(new Domain(PropelTypes::REAL, 'FLOAT'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::DOUBLE, 'DOUBLE PRECISION'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::FLOAT, 'DOUBLE PRECISION'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::LONGVARCHAR, 'TEXT'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::BINARY, 'BYTEA'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::VARBINARY, 'BYTEA'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::LONGVARBINARY, 'BYTEA'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::BLOB, 'BYTEA'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::CLOB, 'TEXT'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::OBJECT, 'BYTEA'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::PHP_ARRAY, 'TEXT'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::ENUM, 'INT2'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::DECIMAL, 'NUMERIC'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::TIMESTAMPTZ, 'TIMESTAMPTZ'));
+        $this->setSchemaDomainMapping(new Domain((new Types\DoubleType())->getName(), 'DOUBLE PRECISION'));
+        $this->setSchemaDomainMapping(new Domain((new Types\FloatType())->getName(), 'DOUBLE PRECISION'));
+        $this->setSchemaDomainMapping(new Domain((new Types\LongVarCharType())->getName(), 'TEXT'));
+        $this->setSchemaDomainMapping(new Domain((new Types\BinaryType())->getName(), 'BYTEA'));
+        $this->setSchemaDomainMapping(new Domain((new Types\VarBinaryType())->getName(), 'BYTEA'));
+        $this->setSchemaDomainMapping(new Domain((new Types\LongVarBinaryType())->getName(), 'BYTEA'));
+        $this->setSchemaDomainMapping(new Domain((new Types\BlobType())->getName(), 'BYTEA'));
+        $this->setSchemaDomainMapping(new Domain((new Types\ClobType())->getName(), 'TEXT'));
+        $this->setSchemaDomainMapping(new Domain((new Types\ObjectType())->getName(), 'BYTEA'));
+        $this->setSchemaDomainMapping(new Domain((new Types\ArrayType())->getName(), 'TEXT'));
+        $this->setSchemaDomainMapping(new Domain((new Types\EnumType())->getName(), 'INT2'));
+        $this->setSchemaDomainMapping(new Domain((new Types\DecimalType())->getName(), 'NUMERIC'));
+        $this->setSchemaDomainMapping(new Domain((new Types\TimeStampTzType())->getName(), 'TIMESTAMPTZ'));
     }
 
     public function getNativeIdMethod()
@@ -236,7 +237,7 @@ SET search_path TO public;
 
         return $ret;
     }
-    
+
     /**
      * @return string
      */
@@ -246,7 +247,7 @@ SET search_path TO public;
 BEGIN;
 ";
     }
-    
+
     /**
      * @return string
      */

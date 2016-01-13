@@ -17,11 +17,8 @@ use Propel\Generator\Model\ForeignKey;
 use Propel\Generator\Model\IdMethod;
 use Propel\Generator\Model\PropelTypes;
 use Propel\Generator\Model\Table;
-use Propel\Generator\Platform\MssqlPlatform;
 use Propel\Generator\Platform\MysqlPlatform;
-use Propel\Generator\Platform\OraclePlatform;
 use Propel\Generator\Platform\PlatformInterface;
-use Propel\Generator\Platform\SqlsrvPlatform;
 
 /**
  * Generates a PHP5 base Object class for user object model (OM).
@@ -143,8 +140,6 @@ class ObjectBuilder extends AbstractObjectBuilder
             $fmt = $this->getPlatform()->getTimeFormatter();
         } elseif ($column->getType() === PropelTypes::TIMESTAMP) {
             $fmt = $this->getPlatform()->getTimestampFormatter();
-        } elseif ($column->getType() === PropelTypes::TIMESTAMPTZ) {
-            $fmt = $this->getPlatform()->getTimestampTzFormatter();
         }
 
         return $fmt;
@@ -785,7 +780,7 @@ abstract class ".$this->getUnqualifiedClassName().$parentClass." implements Acti
 
         $handleMysqlDate = false;
         if ($this->getPlatform() instanceof MysqlPlatform) {
-            if ($column->getType() === PropelTypes::TIMESTAMP || $column->getType() === PropelTypes::TIMESTAMPTZ) {
+            if ($column->getType() === PropelTypes::TIMESTAMP) {
                 $handleMysqlDate = true;
                 $mysqlInvalidDateString = '0000-00-00 00:00:00';
             } elseif ($column->getType() === PropelTypes::DATE) {
@@ -829,8 +824,6 @@ abstract class ".$this->getUnqualifiedClassName().$parentClass." implements Acti
             $defaultfmt = $this->getBuildProperty('generator.dateTime.defaultTimeFormat');
         } elseif ($column->getType() === PropelTypes::TIMESTAMP) {
             $defaultfmt = $this->getBuildProperty('generator.dateTime.defaultTimeStampFormat');
-        } elseif ($column->getType() === PropelTypes::TIMESTAMPTZ) {
-            $defaultfmt = $this->getBuildProperty('generator.dateTime.defaultTimeStampTzFormat');
         }
 
         if (empty($defaultfmt)) {
@@ -896,8 +889,6 @@ abstract class ".$this->getUnqualifiedClassName().$parentClass." implements Acti
             $defaultfmt = $this->getBuildProperty('generator.dateTime.defaultTimeFormat');
         } elseif ($column->getType() === PropelTypes::TIMESTAMP) {
             $defaultfmt = $this->getBuildProperty('generator.dateTime.defaultTimeStampFormat');
-        } elseif ($column->getType() === PropelTypes::TIMESTAMPTZ) {
-            $defaultfmt = $this->getBuildProperty('generator.dateTime.defaultTimeStampTzFormat');
         }
 
         if (empty($defaultfmt)) {
@@ -1318,41 +1309,20 @@ abstract class ".$this->getUnqualifiedClassName().$parentClass." implements Acti
         $platform = $this->getPlatform();
         $clo = $column->getLowercasedName();
 
-        // pdo_sqlsrv driver requires the use of PDOStatement::bindColumn() or a hex string will be returned
-        if ($column->getType() === PropelTypes::BLOB && $platform instanceof SqlsrvPlatform) {
-            $script .= "
-        \$c = \$this->buildPkeyCriteria();
-        \$c->addSelectColumn(".$this->getColumnConstant($column).");
-        try {
-            \$row = array(0 => null);
-            \$dataFetcher = ".$this->getQueryClassName()."::create(null, \$c)->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find(\$con);
-            if (\$dataFetcher instanceof PDODataFetcher) {
-                \$dataFetcher->bindColumn(1, \$row[0], PDO::PARAM_LOB, 0, PDO::SQLSRV_ENCODING_BINARY);
-            }
-            \$row = \$dataFetcher->fetch(PDO::FETCH_BOUND);
-            \$dataFetcher->close();";
-        } else {
-            $script .= "
+
+        $script .= "
         \$c = \$this->buildPkeyCriteria();
         \$c->addSelectColumn(".$this->getColumnConstant($column).");
         try {
             \$dataFetcher = ".$this->getQueryClassName()."::create(null, \$c)->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find(\$con);
             \$row = \$dataFetcher->fetch();
             \$dataFetcher->close();";
-        }
-
         $script .= "
 
         \$firstColumn = \$row ? current(\$row) : null;
 ";
 
-        if ($column->getType() === PropelTypes::CLOB && $platform instanceof OraclePlatform) {
-            // PDO_OCI returns a stream for CLOB objects, while other PDO adapters return a string...
-            $script .= "
-            if (\$firstColumn) {
-                \$this->$clo = stream_get_contents(\$firstColumn);
-            }";
-        } elseif ($column->isLobType() && !$platform->hasStreamBlobImpl()) {
+        if ($column->isLobType() && !$platform->hasStreamBlobImpl()) {
             $script .= "
             if (\$firstColumn !== null) {
                 \$this->$clo = fopen('php://memory', 'r+');
@@ -1627,7 +1597,16 @@ abstract class ".$this->getUnqualifiedClassName().$parentClass." implements Acti
                 || (\$dt->format($fmt) === $defaultValue) // or the entered value matches the default
                  ) {";
         } else {
-            $format =  $this->getTemporalFormatter($col);
+            switch ($col->getType()) {
+                case 'DATE':
+                    $format = 'Y-m-d';
+                    break;
+                case 'TIME':
+                    $format = 'H:i:s';
+                    break;
+                default:
+                    $format = 'Y-m-d H:i:s';
+            }
             $script .= "
             if (\$this->{$clo} === null || \$dt === null || \$dt->format(\"$format\") !== \$this->{$clo}->format(\"$format\")) {";
         }
@@ -2084,11 +2063,7 @@ abstract class ".$this->getUnqualifiedClassName().$parentClass." implements Acti
 
             \$col = \$row[$indexName];";
                 $clo = $col->getLowercasedName();
-                if ($col->getType() === PropelTypes::CLOB_EMU && $this->getPlatform() instanceof OraclePlatform) {
-                    // PDO_OCI returns a stream for CLOB objects, while other PDO adapters return a string...
-                    $script .= "
-            \$this->$clo = stream_get_contents(\$col);";
-                } elseif ($col->isLobType() && !$platform->hasStreamBlobImpl()) {
+                if ($col->isLobType() && !$platform->hasStreamBlobImpl()) {
                     $script .= "
             if (null !== \$col) {
                 \$this->$clo = fopen('php://memory', 'r+');
@@ -5500,22 +5475,8 @@ abstract class ".$this->getUnqualifiedClassName().$parentClass." implements Acti
      */
     protected function doInsert(ConnectionInterface \$con)
     {";
-        if ($this->getPlatform() instanceof MssqlPlatform) {
-            if ($table->hasAutoIncrementPrimaryKey() ) {
-                $script .= "
-        \$this->modifiedColumns[" . $this->getColumnConstant($table->getAutoIncrementPrimaryKey()).'] = true;';
-            }
-            $script .= "
-        \$criteria = \$this->buildCriteria();";
-            if ($this->getTable()->getIdMethod() != IdMethod::NO_ID_METHOD) {
-                $script .= $this->addDoInsertBodyWithIdMethod();
-            } else {
-                $script .= $this->addDoInsertBodyStandard();
-            }
-        } else {
-            $script .= $this->addDoInsertBodyRaw();
-        }
-            $script .= "
+        $script .= $this->addDoInsertBodyRaw();
+        $script .= "
         \$this->setNew(false);
     }
 ";

@@ -11,6 +11,7 @@
 namespace Propel\Generator\Model;
 
 use Propel\Generator\Exception\EngineException;
+use Propel\Generator\Types;
 
 /**
  * A class for holding data about a domain used in the schema.
@@ -277,11 +278,11 @@ class Domain extends MappingModel
             throw new EngineException('Cannot get PHP version of default value for default value EXPRESSION.');
         }
 
-        if (in_array($this->mappingType, [ PropelTypes::BOOLEAN, PropelTypes::BOOLEAN_EMU ])) {
+        if (in_array($this->mappingType, [ (new Types\BooleanType())->getName(), (new Types\BooleanEmuType())->getName() ])) {
             return $this->booleanValue($this->defaultValue->getValue());
         }
 
-        if (PropelTypes::PHP_ARRAY === $this->mappingType) {
+        if (PropelTypes::isPhpArrayType($this->mappingType)) {
             return $this->getDefaultValueForArray($this->defaultValue->getValue());
         }
 
