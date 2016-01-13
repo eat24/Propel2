@@ -22,6 +22,7 @@ use Propel\Generator\Model\Table;
 use Propel\Generator\Model\Unique;
 use Propel\Generator\Model\Diff\ColumnDiff;
 use Propel\Generator\Model\Diff\DatabaseDiff;
+use Propel\Generator\Types;
 
 /**
  * MySql PlatformInterface implementation.
@@ -40,18 +41,18 @@ class MysqlPlatform extends DefaultPlatform
     protected function initialize()
     {
         parent::initialize();
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::BOOLEAN, 'TINYINT', 1));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::NUMERIC, 'DECIMAL'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::LONGVARCHAR, 'TEXT'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::BINARY, 'BLOB'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::VARBINARY, 'MEDIUMBLOB'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::LONGVARBINARY, 'LONGBLOB'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::CLOB, 'LONGTEXT'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::TIMESTAMP, 'DATETIME'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::OBJECT, 'MEDIUMBLOB'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::PHP_ARRAY, 'TEXT'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::ENUM, 'TINYINT'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::REAL, 'DOUBLE'));
+        $this->setSchemaDomainMapping(new Domain((new Types\BooleanType())->getName(), 'TINYINT', 1));
+        $this->setSchemaDomainMapping(new Domain((new Types\NumericType())->getName(), 'DECIMAL'));
+        $this->setSchemaDomainMapping(new Domain((new Types\LongVarCharType())->getName(), 'TEXT'));
+        $this->setSchemaDomainMapping(new Domain((new Types\BinaryType())->getName(), 'BLOB'));
+        $this->setSchemaDomainMapping(new Domain((new Types\VarBinaryType())->getName(), 'MEDIUMBLOB'));
+        $this->setSchemaDomainMapping(new Domain((new Types\LongVarBinaryType())->getName(), 'LONGBLOB'));
+        $this->setSchemaDomainMapping(new Domain((new Types\ClobType())->getName(), 'LONGTEXT'));
+        $this->setSchemaDomainMapping(new Domain((new Types\TimeStampType())->getName(), 'DATETIME'));
+        $this->setSchemaDomainMapping(new Domain((new Types\ObjectType())->getName(), 'MEDIUMBLOB'));
+        $this->setSchemaDomainMapping(new Domain((new Types\ArrayType())->getName(), 'TEXT'));
+        $this->setSchemaDomainMapping(new Domain((new Types\EnumType())->getName(), 'TINYINT'));
+        $this->setSchemaDomainMapping(new Domain((new Types\RealType())->getName(), 'DOUBLE'));
     }
 
     public function setGeneratorConfig(GeneratorConfigInterface $generatorConfig)

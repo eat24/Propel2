@@ -583,7 +583,7 @@
             <xs:element name="id-method-parameter" type="id-method-parameter" minOccurs="0" maxOccurs="unbounded">
                 <xs:annotation>
                     <xs:documentation xml:lang="en">
-                        If you are using a database that uses sequences for auto-increment columns (e.g. PostgreSQL or Oracle), you can customize the name of the sequence using this tag
+                        If you are using a database that uses sequences for auto-increment columns (e.g. PostgreSQL), you can customize the name of the sequence using this tag
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
