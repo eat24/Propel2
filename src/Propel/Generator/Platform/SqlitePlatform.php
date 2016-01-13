@@ -21,6 +21,7 @@ use Propel\Generator\Model\ForeignKey;
 use Propel\Generator\Model\PropelTypes;
 use Propel\Generator\Model\Table;
 use Propel\Generator\Model\Unique;
+use Propel\Generator\Types;
 
 /**
  * SQLite PlatformInterface implementation.
@@ -57,17 +58,17 @@ class SqlitePlatform extends DefaultPlatform
 
         $this->foreignKeySupport = version_compare($version, '3.6.19') >= 0;
 
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::NUMERIC, 'DECIMAL'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::LONGVARCHAR, 'MEDIUMTEXT'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::DATE, 'DATETIME'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::BINARY, 'BLOB'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::VARBINARY, 'MEDIUMBLOB'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::LONGVARBINARY, 'LONGBLOB'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::BLOB, 'BLOB'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::CLOB, 'LONGTEXT'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::OBJECT, 'BLOB'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::PHP_ARRAY, 'MEDIUMTEXT'));
-        $this->setSchemaDomainMapping(new Domain(PropelTypes::ENUM, 'TINYINT'));
+        $this->setSchemaDomainMapping(new Domain((new Types\NumericType())->getName(), 'DECIMAL'));
+        $this->setSchemaDomainMapping(new Domain((new Types\LongVarCharType())->getName(), 'MEDIUMTEXT'));
+        $this->setSchemaDomainMapping(new Domain((new Types\DateType())->getName(), 'DATETIME'));
+        $this->setSchemaDomainMapping(new Domain((new Types\BinaryType())->getName(), 'BLOB'));
+        $this->setSchemaDomainMapping(new Domain((new Types\VarBinaryType())->getName(), 'MEDIUMBLOB'));
+        $this->setSchemaDomainMapping(new Domain((new Types\LongVarBinaryType())->getName(), 'LONGBLOB'));
+        $this->setSchemaDomainMapping(new Domain((new Types\BlobType())->getName(), 'BLOB'));
+        $this->setSchemaDomainMapping(new Domain((new Types\ClobType())->getName(), 'LONGTEXT'));
+        $this->setSchemaDomainMapping(new Domain((new Types\ObjectType())->getName(), 'BLOB'));
+        $this->setSchemaDomainMapping(new Domain((new Types\ArrayType())->getName(), 'MEDIUMTEXT'));
+        $this->setSchemaDomainMapping(new Domain((new Types\EnumType())->getName(), 'TINYINT'));
     }
 
     public function getSchemaDelimiter()

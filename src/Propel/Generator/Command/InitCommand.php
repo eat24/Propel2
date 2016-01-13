@@ -61,10 +61,7 @@ class InitCommand extends AbstractCommand
         $supportedRdbms = [
             'mysql' => 'MySQL',
             'sqlite' => 'SQLite',
-            'pgsql' => 'PostgreSQL',
-            'oracle' => 'Oracle',
-            'sqlsrv' => 'MSSQL (via pdo-sqlsrv)',
-            'mssql' => 'MSSQL (via pdo-mssql)'
+            'pgsql' => 'PostgreSQL'
         ];
 
         $options['rdbms'] = $consoleHelper->select('Please pick your favorite database management system', $supportedRdbms);

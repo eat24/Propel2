@@ -24,6 +24,7 @@ use Propel\Generator\Model\Diff\ColumnDiff;
 use Propel\Generator\Model\Diff\DatabaseDiff;
 use Propel\Generator\Model\Diff\TableDiff;
 use Propel\Generator\Exception\EngineException;
+use Propel\Generator\Types;
 use Propel\Runtime\Connection\ConnectionInterface;
 
 /**
@@ -130,17 +131,13 @@ class DefaultPlatform implements PlatformInterface
     {
         $this->schemaDomainMap = [];
         foreach (PropelTypes::getPropelTypes() as $type) {
-            $this->schemaDomainMap[$type] = new Domain($type);
+            $this->schemaDomainMap[$type->getName()] = new Domain($type->getName());
         }
-        // BU_* no longer needed, so map these to the DATE/TIMESTAMP domains
-        $this->schemaDomainMap[PropelTypes::BU_DATE] = new Domain(PropelTypes::DATE);
-        $this->schemaDomainMap[PropelTypes::BU_TIMESTAMP] = new Domain(PropelTypes::TIMESTAMP);
-
         // Boolean is a bit special, since typically it must be mapped to INT type.
-        $this->schemaDomainMap[PropelTypes::BOOLEAN] = new Domain(PropelTypes::BOOLEAN, 'INTEGER');
+        $this->schemaDomainMap[(new Types\BooleanType())->getName()] = new Domain((new Types\BooleanType())->getName(), 'INTEGER');
 
         // Default timestamptz to timestamp for non-pgsql
-        $this->schemaDomainMap[PropelTypes::TIMESTAMPTZ] = new Domain(PropelTypes::TIMESTAMPTZ, 'TIMESTAMP');
+        $this->schemaDomainMap[(new Types\TimestampTzType())->getName()] = new Domain((new Types\TimestampTzType())->getName(), 'TIMESTAMP');
     }
 
     /**

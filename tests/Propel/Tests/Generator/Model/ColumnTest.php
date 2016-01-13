@@ -453,8 +453,6 @@ class ColumnTest extends ModelTestCase
             ['OBJECT', \PDO::PARAM_LOB],
             ['ARRAY', \PDO::PARAM_STR],
             ['ENUM', \PDO::PARAM_INT],
-            ['BU_DATE', \PDO::PARAM_STR],
-            ['BU_TIMESTAMP', \PDO::PARAM_STR],
         ];
     }
 
@@ -539,9 +537,7 @@ class ColumnTest extends ModelTestCase
             ['DATE'],
             ['TIME'],
             ['TIMESTAMP'],
-            ['TIMESTAMPTZ'],
-            ['BU_DATE'],
-            ['BU_TIMESTAMP'],
+            ['TIMESTAMPTZ']
         ];
     }
 
@@ -696,9 +692,7 @@ class ColumnTest extends ModelTestCase
             ['DATE'],
             ['TIME'],
             ['TIMESTAMP'],
-            ['TIMESTAMPTZ'],
-            ['BU_DATE'],
-            ['BU_TIMESTAMP'],
+            ['TIMESTAMPTZ']
         ];
     }
 

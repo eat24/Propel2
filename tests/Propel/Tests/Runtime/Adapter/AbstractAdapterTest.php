@@ -16,7 +16,6 @@ use Propel\Tests\Bookstore\Map\BookTableMap;
 use Propel\Tests\TestCaseFixtures;
 
 /**
- * Tests the DbOracle adapter
  *
  * @see        BookstoreDataPopulator
  * @author Francois EZaninotto

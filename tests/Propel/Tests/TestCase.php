@@ -82,22 +82,6 @@ class TestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return bool
-     */
-    protected function runningOnOracle()
-    {
-        return $this->isDb('oracle');
-    }
-
-    /**
-     * @return bool
-     */
-    protected function runningOnMSSQL()
-    {
-        return $this->isDb('mssql');
-    }
-
-    /**
      * @return \Propel\Generator\Platform\PlatformInterface
      */
     protected function getPlatform()

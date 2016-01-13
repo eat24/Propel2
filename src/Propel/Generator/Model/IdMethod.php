@@ -21,7 +21,7 @@ interface IdMethod
 {
     /**
      * Key generation via database-specific ID method
-     * (i.e. auto-increment for MySQL, sequence for Oracle, etc.).
+     * (i.e. auto-increment for MySQL, sequence for Pgsql, etc.).
      */
     const NATIVE = 'native';
 
