@@ -48,7 +48,7 @@ class MysqlPlatform extends DefaultPlatform
         $this->setSchemaDomainMapping(new Domain((new Types\VarBinaryType())->getName(), 'MEDIUMBLOB'));
         $this->setSchemaDomainMapping(new Domain((new Types\LongVarBinaryType())->getName(), 'LONGBLOB'));
         $this->setSchemaDomainMapping(new Domain((new Types\ClobType())->getName(), 'LONGTEXT'));
-        $this->setSchemaDomainMapping(new Domain((new Types\TimeStampType())->getName(), 'DATETIME'));
+        $this->setSchemaDomainMapping(new Domain((new Types\TimestampType())->getName(), 'DATETIME'));
         $this->setSchemaDomainMapping(new Domain((new Types\ObjectType())->getName(), 'MEDIUMBLOB'));
         $this->setSchemaDomainMapping(new Domain((new Types\ArrayType())->getName(), 'TEXT'));
         $this->setSchemaDomainMapping(new Domain((new Types\EnumType())->getName(), 'TINYINT'));

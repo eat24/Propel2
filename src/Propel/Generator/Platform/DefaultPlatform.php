@@ -137,7 +137,7 @@ class DefaultPlatform implements PlatformInterface
         $this->schemaDomainMap[(new Types\BooleanType())->getName()] = new Domain((new Types\BooleanType())->getName(), 'INTEGER');
 
         // Default timestamptz to timestamp for non-pgsql
-        $this->schemaDomainMap[(new Types\TimeStampTzType())->getName()] = new Domain((new Types\TimeStampTzType())->getName(), 'TIMESTAMP');
+        $this->schemaDomainMap[(new Types\TimestampTzType())->getName()] = new Domain((new Types\TimestampTzType())->getName(), 'TIMESTAMP');
     }
 
     /**

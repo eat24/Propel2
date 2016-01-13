@@ -61,7 +61,7 @@ class PgsqlPlatform extends DefaultPlatform
         $this->setSchemaDomainMapping(new Domain((new Types\ArrayType())->getName(), 'TEXT'));
         $this->setSchemaDomainMapping(new Domain((new Types\EnumType())->getName(), 'INT2'));
         $this->setSchemaDomainMapping(new Domain((new Types\DecimalType())->getName(), 'NUMERIC'));
-        $this->setSchemaDomainMapping(new Domain((new Types\TimeStampTzType())->getName(), 'TIMESTAMPTZ'));
+        $this->setSchemaDomainMapping(new Domain((new Types\TimestampTzType())->getName(), 'TIMESTAMPTZ'));
     }
 
     public function getNativeIdMethod()
