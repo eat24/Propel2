@@ -43,8 +43,6 @@ class PropelTypes
     const TIME          = 'TIME';
     const TIMESTAMP     = 'TIMESTAMP';
     const TIMESTAMPTZ   = 'TIMESTAMPTZ';
-    const BU_DATE       = 'BU_DATE';
-    const BU_TIMESTAMP  = 'BU_TIMESTAMP';
     const BOOLEAN       = 'BOOLEAN';
     const BOOLEAN_EMU   = 'BOOLEAN_EMU';
     const OBJECT        = 'OBJECT';
@@ -70,12 +68,10 @@ class PropelTypes
     const VARBINARY_NATIVE_TYPE     = 'string';
     const LONGVARBINARY_NATIVE_TYPE = 'string';
     const BLOB_NATIVE_TYPE          = 'resource';
-    const BU_DATE_NATIVE_TYPE       = 'string';
     const DATE_NATIVE_TYPE          = 'string';
     const TIME_NATIVE_TYPE          = 'string';
     const TIMESTAMP_NATIVE_TYPE     = 'string';
     const TIMESTAMPTZ_NATIVE_TYPE   = 'string';
-    const BU_TIMESTAMP_NATIVE_TYPE  = 'string';
     const BOOLEAN_NATIVE_TYPE       = 'boolean';
     const BOOLEAN_EMU_NATIVE_TYPE   = 'boolean';
     const OBJECT_NATIVE_TYPE        = '';
@@ -116,11 +112,6 @@ class PropelTypes
         self::PHP_ARRAY,
         self::ENUM,
         self::GEOMETRY,
-        // These are pre-epoch dates, which we need to map to String type
-        // since they cannot be properly handled using strtotime() -- or
-        // even numeric timestamps on Windows.
-        self::BU_DATE,
-        self::BU_TIMESTAMP,
     ];
 
     /**
@@ -148,11 +139,9 @@ class PropelTypes
         self::LONGVARBINARY => self::LONGVARBINARY_NATIVE_TYPE,
         self::BLOB          => self::BLOB_NATIVE_TYPE,
         self::DATE          => self::DATE_NATIVE_TYPE,
-        self::BU_DATE       => self::BU_DATE_NATIVE_TYPE,
         self::TIME          => self::TIME_NATIVE_TYPE,
         self::TIMESTAMP     => self::TIMESTAMP_NATIVE_TYPE,
         self::TIMESTAMPTZ   => self::TIMESTAMPTZ_NATIVE_TYPE,
-        self::BU_TIMESTAMP  => self::BU_TIMESTAMP_NATIVE_TYPE,
         self::BOOLEAN       => self::BOOLEAN_NATIVE_TYPE,
         self::BOOLEAN_EMU   => self::BOOLEAN_EMU_NATIVE_TYPE,
         self::OBJECT        => self::OBJECT_NATIVE_TYPE,
@@ -190,20 +179,12 @@ class PropelTypes
         self::TIME          => \PDO::PARAM_STR,
         self::TIMESTAMP     => \PDO::PARAM_STR,
         self::TIMESTAMPTZ   => \PDO::PARAM_STR,
-        self::BU_DATE       => \PDO::PARAM_STR,
-        self::BU_TIMESTAMP  => \PDO::PARAM_STR,
         self::BOOLEAN       => \PDO::PARAM_BOOL,
         self::BOOLEAN_EMU   => \PDO::PARAM_INT,
         self::OBJECT        => \PDO::PARAM_LOB,
         self::PHP_ARRAY     => \PDO::PARAM_STR,
         self::ENUM          => \PDO::PARAM_INT,
         self::GEOMETRY      => \PDO::PARAM_LOB,
-
-        // These are pre-epoch dates, which we need to map to String type
-        // since they cannot be properly handled using strtotime() -- or even
-        // numeric timestamps on Windows.
-        self::BU_DATE       => \PDO::PARAM_STR,
-        self::BU_TIMESTAMP  => \PDO::PARAM_STR,
     ];
 
     private static $pdoTypeNames = [
@@ -268,9 +249,7 @@ class PropelTypes
             self::DATE,
             self::TIME,
             self::TIMESTAMP,
-            self::TIMESTAMPTZ,
-            self::BU_DATE,
-            self::BU_TIMESTAMP,
+            self::TIMESTAMPTZ
         ]);
     }
 
@@ -290,9 +269,7 @@ class PropelTypes
             self::DATE,
             self::TIME,
             self::TIMESTAMP,
-            self::TIMESTAMPTZ,
-            self::BU_DATE,
-            self::BU_TIMESTAMP,
+            self::TIMESTAMPTZ
         ]);
     }
 
