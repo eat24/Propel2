@@ -1337,7 +1337,7 @@ if (is_resource($columnValueAccessor)) {
 \$stmt->bindValue(%s, %s, %s);",
             $identifier,
             $columnValueAccessor,
-            PropelTypes::getPdoTypeString($column->getType())
+            PropelTypes::getPdoTypeStringFromPdoType($column->getPDOType())
         );
 
         return preg_replace('/^(.+)/m', $tab . '$1', $script);
